@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071a14">
+  <meta name="description" content="نداء الصلاة — تطبيق إسلامي يجمع مواقيت الصلاة والقرآن الكريم والأذكار واتجاه القبلة في تجربة واحدة.">
+  <title>نداء الصلاة | رفيق يومك</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #061711;
+      --bg-2: #0a2119;
+      --surface: rgba(17, 48, 36, .68);
+      --surface-strong: rgba(20, 57, 42, .88);
+      --surface-soft: rgba(255,255,255,.045);
+      --text: #f3f5e9;
+      --muted: #b1c2b4;
+      --muted-2: #7e9988;
+      --gold: #d6b66e;
+      --gold-bright: #f1d99a;
+      --line: rgba(218, 194, 133, .2);
+      --shadow: 0 28px 90px rgba(0,0,0,.28);
+      --green: #163c2d;
+      --header: rgba(6, 23, 17, .62);
+      --card-glow: rgba(213, 181, 105, .12);
+      --radius: 26px;
+    }
+    [data-theme="light"] {
+      color-scheme: light;
+      --bg: #edf4e9;
+      --bg-2: #e1eddf;
+      --surface: rgba(255,255,255,.72);
+      --surface-strong: rgba(255,255,255,.9);
+      --surface-soft: rgba(21, 74, 48, .045);
+      --text: #153626;
+      --muted: #557260;
+      --muted-2: #789181;
+      --gold: #a98235;
+      --gold-bright: #c49a4c;
+      --line: rgba(169, 130, 53, .24);
+      --shadow: 0 24px 70px rgba(34, 73, 48, .12);
+      --green: #d8e8d7;
+      --header: rgba(237, 244, 233, .72);
+      --card-glow: rgba(191, 151, 68, .16);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 82% 12%, rgba(195,157,82,.13), transparent 26rem),
+        radial-gradient(ellipse at 8% 42%, rgba(48,113,78,.2), transparent 31rem),
+        linear-gradient(145deg, var(--bg), var(--bg-2));
+      font-family: "Cairo", "Manrope", sans-serif;
+      transition: background .45s ease, color .35s ease;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      z-index: -1;
+      width: 30rem; height: 30rem;
+      border-radius: 50%;
+      filter: blur(95px);
+      opacity: .15;
+      pointer-events: none;
+      animation: floatGlow 18s ease-in-out infinite alternate;
+    }
+    body::before { top: 9%; right: -16rem; background: #b88e43; }
+    body::after { bottom: -12rem; left: -17rem; background: #2d8055; animation-delay: -8s; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .container { width: min(1160px, calc(100% - 44px)); margin-inline: auto; }
+    .top-shell {
+      position: sticky; top: 14px; z-index: 50;
+      width: min(1200px, calc(100% - 32px));
+      margin: 14px auto 0;
+    }
+    .navbar {
+      min-height: 70px;
+      display: flex; align-items: center; justify-content: space-between; gap: 22px;
+      padding: 10px 17px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--header);
+      -webkit-backdrop-filter: blur(22px) saturate(145%);
+      backdrop-filter: blur(22px) saturate(145%);
+      box-shadow: 0 12px 38px rgba(0,0,0,.1), inset 0 1px rgba(255,255,255,.07);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 11px; flex-shrink: 0; }
+    .brand-mark {
+      width: 43px; height: 43px; display: grid; place-items: center;
+      border-radius: 14px; color: #183323;
+      background: linear-gradient(145deg, #f2dfa9, #b68e48);
+      box-shadow: 0 8px 22px rgba(190,151,76,.26), inset 0 1px rgba(255,255,255,.75);
+    }
+    .brand-mark svg { width: 25px; height: 25px; }
+    .brand-name { font-weight: 800; font-size: 1.08rem; line-height: 1.15; letter-spacing: -.3px; }
+    .brand-caption { display: block; color: var(--muted-2); font: 600 .63rem "Manrope",sans-serif; letter-spacing: 1.5px; margin-top: 3px; }
+    .nav-links { display: flex; align-items: center; gap: clamp(14px,2.3vw,30px); color: var(--muted); font-size: .87rem; font-weight: 600; }
+    .nav-links a { transition: color .2s ease; }
+    .nav-links a:hover { color: var(--gold-bright); }
+    .nav-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .tool-btn {
+      min-height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      padding: 0 12px; border: 1px solid var(--line); border-radius: 13px;
+      color: var(--text); background: var(--surface-soft); cursor: pointer;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .tool-btn:hover { transform: translateY(-2px); border-color: var(--gold); }
+    .tool-btn svg { width: 17px; height: 17px; }
+    .lang-label { font-size: .78rem; font-weight: 700; }
+    .menu-toggle { display: none; }
+    .hero { position: relative; min-height: 660px; display: grid; align-items: center; padding: 94px 0 80px; }
+    .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 56px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px; padding: 8px 14px;
+      border: 1px solid var(--line); border-radius: 999px; color: var(--gold-bright);
+      background: var(--surface-soft); font-size: .78rem; font-weight: 700;
+      box-shadow: inset 0 1px rgba(255,255,255,.05);
+    }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 13px var(--gold); }
+    h1 { max-width: 650px; margin: 23px 0 18px; font-size: clamp(2.8rem,6.2vw,5.6rem); line-height: 1.18; letter-spacing: -2px; font-weight: 800; }
+    .gold-text { color: var(--gold-bright); text-shadow: 0 5px 36px rgba(211,175,98,.16); }
+    .hero-copy { max-width: 570px; margin: 0; color: var(--muted); font-size: clamp(1rem,1.5vw,1.12rem); line-height: 2.05; }
+    .hero-buttons { display: flex; align-items: center; flex-wrap: wrap; gap: 13px; margin-top: 31px; }
+    .button {
+      min-height: 54px; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 0 22px; border: 1px solid transparent; border-radius: 16px;
+      font-weight: 800; font-size: .92rem; transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
+    }
+    .button:hover { transform: translateY(-3px); }
+    .button-primary {
+      color: #17291b; background: linear-gradient(135deg, #f3dfa7, #c39a51);
+      box-shadow: 0 12px 30px rgba(192,151,73,.23), inset 0 1px rgba(255,255,255,.7);
+    }
+    .button-primary:hover { box-shadow: 0 17px 36px rgba(192,151,73,.32); }
+    .button-ghost { border-color: var(--line); color: var(--text); background: var(--surface); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+    .button svg { width: 19px; height: 19px; }
+    .hero-note { margin-top: 15px; color: var(--muted-2); font-size: .76rem; }
+    .hero-art { position: relative; min-height: 500px; display: grid; place-items: center; perspective: 1200px; }
+    .orbit {
+      position: absolute; width: min(430px, 88vw); aspect-ratio: 1; border-radius: 50%;
+      border: 1px solid rgba(215,184,113,.17); transform: rotateX(68deg) rotateZ(-22deg);
+      box-shadow: 0 0 55px rgba(200,166,94,.08), inset 0 0 45px rgba(200,166,94,.04);
+    }
+    .orbit::before,.orbit::after { content:""; position:absolute; inset: 27px; border:1px dashed rgba(215,184,113,.2); border-radius:50%; }
+    .orbit::after { inset: 62px; border-style: solid; opacity: .5; }
+    .phone-wrap { position: relative; z-index: 2; transform: rotateY(-13deg) rotateX(5deg) rotateZ(-4deg); animation: phoneFloat 7s ease-in-out infinite; }
+    .phone {
+      position: relative; width: 258px; min-height: 464px; padding: 12px;
+      border: 1px solid rgba(242,221,169,.42); border-radius: 38px;
+      background: linear-gradient(145deg, rgba(245,226,177,.28), rgba(255,255,255,.035) 32%, rgba(5,22,16,.8));
+      box-shadow: 28px 35px 75px rgba(0,0,0,.32), inset 0 1px rgba(255,255,255,.45), inset -2px -2px 9px rgba(225,193,123,.17);
+      -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+    }
+    [data-theme="light"] .phone { background: linear-gradient(145deg, rgba(255,255,255,.9), rgba(205,226,203,.72)); box-shadow: 25px 30px 75px rgba(42,81,49,.2), inset 0 1px white; }
+    .phone-screen {
+      min-height: 438px; overflow: hidden; padding: 20px 15px 16px; border-radius: 28px;
+      background: radial-gradient(circle at 80% 8%, rgba(215,181,103,.19), transparent 37%), linear-gradient(155deg,#102d20,#07170f);
+      color: #f4f1df; border: 1px solid rgba(255,255,255,.08);
+    }
+    [data-theme="light"] .phone-screen { background: linear-gradient(155deg,#e5f0df,#cbdcc7); color: #173c28; }
+    .phone-top { display:flex; justify-content:space-between; align-items:center; color:rgba(255,255,255,.65); font:600 .62rem "Manrope",sans-serif; }
+    [data-theme="light"] .phone-top { color: #56735e; }
+    .phone-greeting { margin-top: 27px; font-size: .78rem; color: #d6c79d; }
+    [data-theme="light"] .phone-greeting { color:#8d6e30; }
+    .phone-title { margin-top: 3px; font-size: 1.22rem; font-weight: 800; }
+    .prayer-panel {
+      margin-top: 20px; padding: 16px; border: 1px solid rgba(224,194,127,.3); border-radius: 19px;
+      background: linear-gradient(135deg,rgba(218,185,111,.17),rgba(255,255,255,.035));
+    }
+    .prayer-panel small { color: #d1c49f; font-size: .63rem; }
+    [data-theme="light"] .prayer-panel small { color:#6a7657; }
+    .prayer-panel strong { display:block; margin-top:5px; font-size:1.28rem; }
+    .prayer-panel .line { height:1px; background:rgba(220,195,137,.2); margin:13px 0; }
+    .prayer-row { display:flex; justify-content:space-between; align-items:center; font-size:.7rem; color:rgba(255,255,255,.8); }
+    [data-theme="light"] .prayer-row { color:#3e6147; }
+    .phone-shortcuts { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px; }
+    .shortcut { display:grid; place-items:center; gap:7px; min-height:72px; border:1px solid rgba(238,219,168,.16); border-radius:14px; background:rgba(255,255,255,.055); font-size:.6rem; }
+    [data-theme="light"] .shortcut { background:rgba(255,255,255,.48); border-color:rgba(111,145,103,.2); }
+    .shortcut b { color:#e5cb89; font-size:1.05rem; }
+    [data-theme="light"] .shortcut b { color:#967437; }
+    .phone-bottom { margin-top:17px; height:4px; width:74px; border-radius:9px; background:rgba(255,255,255,.48); margin-inline:auto; }
+    .float-card {
+      position:absolute; z-index:3; display:flex; align-items:center; gap:10px; padding:13px 16px;
+      border:1px solid var(--line); border-radius:17px; background:var(--surface-strong);
+      box-shadow:var(--shadow); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
+      color:var(--text); animation: badgeFloat 6s ease-in-out infinite;
+    }
+    .float-card .badge-icon { width:36px;height:36px;display:grid;place-items:center;border-radius:12px;color:#21351f;background:linear-gradient(145deg,#f1dfa7,#bb9149); }
+    .float-card svg { width:19px;height:19px; }
+    .float-card b { display:block;font-size:.78rem; }
+    .float-card small { display:block;color:var(--muted);font-size:.64rem;margin-top:2px; }
+    .float-one { top: 90px; right: -12px; }
+    .float-two { bottom: 74px; left: -5px; animation-delay:-3s; }
+    .section { position:relative; padding: 94px 0; }
+    .section-head { max-width: 650px; margin: 0 auto 45px; text-align:center; }
+    .section-kicker { color:var(--gold); font-size:.77rem; font-weight:800; letter-spacing:1.2px; }
+    .section-title { margin:11px 0 12px; font-size:clamp(2rem,4.1vw,3.3rem); line-height:1.35; letter-spacing:-1px; }
+    .section-desc { margin:0; color:var(--muted); line-height:2; }
+    .features-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:17px; }
+    .feature-card {
+      min-height:225px; padding:27px; border:1px solid var(--line); border-radius:var(--radius);
+      background:linear-gradient(145deg,var(--surface),var(--surface-soft));
+      box-shadow:inset 0 1px rgba(255,255,255,.07),0 18px 50px rgba(0,0,0,.07);
+      -webkit-backdrop-filter:blur(15px);backdrop-filter:blur(15px);
+      transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease;
+    }
+    .feature-card:hover { transform:translateY(-8px);border-color:rgba(216,183,108,.55);box-shadow:var(--shadow),0 0 45px var(--card-glow); }
+    .feature-icon { width:51px;height:51px;display:grid;place-items:center;border-radius:17px;color:#1c3221;background:linear-gradient(145deg,#f0dda5,#b88f49);box-shadow:0 9px 22px rgba(188,148,70,.18); }
+    .feature-icon svg { width:24px;height:24px; }
+    .feature-card h3 { margin:20px 0 8px;font-size:1.13rem; }
+    .feature-card p { margin:0;color:var(--muted);font-size:.88rem;line-height:1.9; }
+    .showcase {
+      display:grid;grid-template-columns:.9fr 1.1fr;gap:55px;align-items:center;
+      padding:clamp(26px,5vw,56px);border:1px solid var(--line);border-radius:34px;
+      background:linear-gradient(120deg,var(--surface),var(--surface-soft));
+      box-shadow:var(--shadow);overflow:hidden;position:relative;
+    }
+    .showcase::before { content:"";position:absolute;width:380px;height:380px;border-radius:50%;background:var(--card-glow);filter:blur(65px);top:-200px;left:-120px; }
+    .showcase-visual { position:relative;min-height:300px;display:grid;place-items:center; }
+    .quran-card {
+      position:relative;width:min(310px,100%);padding:36px 25px;text-align:center;border:1px solid var(--line);border-radius:26px;
+      background:linear-gradient(145deg,rgba(212,181,108,.18),var(--surface-strong));box-shadow:var(--shadow);
+      transform:rotate(-5deg);transition:transform .5s ease;
+    }
+    .quran-card:hover { transform:rotate(0) translateY(-5px); }
+    .quran-symbol { width:68px;height:68px;margin:0 auto 18px;display:grid;place-items:center;border:1px solid var(--line);border-radius:22px;color:var(--gold-bright);font-size:2rem;background:var(--surface-soft); }
+    .quran-card h3 { margin:0 0 7px;font-size:1.3rem; }
+    .quran-card p { margin:0;color:var(--muted);font-size:.82rem; }
+    .showcase-copy h2 { margin:10px 0 15px;font-size:clamp(1.8rem,3.4vw,2.8rem);line-height:1.4; }
+    .showcase-copy p { color:var(--muted);line-height:2;font-size:.94rem; }
+    .showcase-points { display:grid;gap:12px;margin-top:23px; }
+    .point { display:flex;align-items:center;gap:11px;color:var(--muted);font-size:.88rem; }
+    .check { width:23px;height:23px;display:grid;place-items:center;border-radius:50%;background:rgba(201,166,91,.17);color:var(--gold-bright);font-size:.78rem;flex-shrink:0; }
+    .download-panel {
+      position:relative;padding:clamp(32px,6vw,65px);text-align:center;border:1px solid var(--line);border-radius:34px;
+      background:radial-gradient(ellipse at 50% 0%,var(--card-glow),transparent 55%),linear-gradient(135deg,var(--surface-strong),var(--surface));
+      box-shadow:var(--shadow);overflow:hidden;
+    }
+    .download-panel::before,.download-panel::after { content:"";position:absolute;width:230px;height:230px;border-radius:50%;border:1px solid var(--line);opacity:.55; }
+    .download-panel::before { top:-150px;right:-60px; }
+    .download-panel::after { bottom:-165px;left:-55px; }
+    .download-panel h2 { position:relative;margin:11px 0;font-size:clamp(2rem,4vw,3.2rem); }
+    .download-panel p { position:relative;max-width:590px;margin:0 auto;color:var(--muted);line-height:2; }
+    .download-meta { display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:24px 0; }
+    .meta-pill { padding:8px 14px;border:1px solid var(--line);border-radius:99px;background:var(--surface-soft);color:var(--muted);font-size:.76rem; }
+    .download-panel .button { position:relative; }
+    .download-hint { margin-top:13px!important;font-size:.72rem; }
+    footer { padding:35px 0 45px;border-top:1px solid var(--line); }
+    .footer-inner { display:flex;justify-content:space-between;align-items:center;gap:20px; }
+    .footer-note { color:var(--muted-2);font-size:.77rem; }
+    .footer-links { display:flex;gap:18px;color:var(--muted);font-size:.8rem; }
+    .footer-links a:hover { color:var(--gold); }
+    [data-reveal] { opacity:0; transform:translateY(34px) scale(.985); filter:blur(10px); transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1),filter .9s cubic-bezier(.2,.7,.2,1); }
+    [data-reveal].is-visible { opacity:1;transform:translateY(0) scale(1);filter:blur(0); }
+    [data-reveal="cloud"] { transform:translateY(42px) scale(.97); }
+    [data-reveal="cloud"].is-visible { transform:translateY(0) scale(1); }
+    .delay-1 { transition-delay:.1s; }.delay-2 { transition-delay:.2s; }.delay-3 { transition-delay:.3s; }
+    @keyframes phoneFloat { 0%,100%{transform:rotateY(-13deg) rotateX(5deg) rotateZ(-4deg) translateY(0)}50%{transform:rotateY(-10deg) rotateX(3deg) rotateZ(-2deg) translateY(-13px)} }
+    @keyframes badgeFloat { 0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)} }
+    @keyframes floatGlow { from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-35px,25px,0) scale(1.12)} }
+    @media (max-width: 900px) {
+      .nav-links { display:none;position:absolute;top:80px;right:0;left:0;flex-direction:column;align-items:stretch;padding:15px;border:1px solid var(--line);border-radius:20px;background:var(--surface-strong);backdrop-filter:blur(20px);box-shadow:var(--shadow); }
+      .nav-links.open { display:flex; }.nav-links a { padding:9px 12px; }
+      .menu-toggle { display:inline-flex; }.hero-grid { grid-template-columns:1fr;gap:18px;text-align:center; }
+      .hero { padding-top:70px; }.hero-copy { margin-inline:auto; }.hero-buttons { justify-content:center; }
+      .hero-art { min-height:490px; }.float-one { right:6%; }.float-two { left:7%; }
+      .showcase { grid-template-columns:1fr;gap:22px; }.showcase-copy { text-align:center; }.showcase-points { max-width:440px;margin-inline:auto;text-align:start; }
+    }
+    @media (max-width: 640px) {
+      .container { width:calc(100% - 30px); }.top-shell { width:calc(100% - 20px);top:8px;margin-top:8px; }
+      .navbar { min-height:62px;padding:8px 10px;border-radius:18px;gap:8px; }.brand-mark { width:38px;height:38px; }.brand-name { font-size:.94rem; }
+      .brand-caption { font-size:.55rem; }.nav-actions { gap:5px; }.tool-btn { min-height:38px;padding:0 9px;border-radius:12px; }.lang-label { font-size:.72rem; }
+      .hero { min-height:0;padding:72px 0 40px; }.hero-grid { gap:0; } h1 { font-size:clamp(2.5rem,13vw,4rem);letter-spacing:-1.5px; }
+      .hero-copy { font-size:.95rem; }.hero-art { min-height:450px;margin-top:16px; }.phone { transform:scale(.9);transform-origin:center; }
+      .float-card { padding:10px 12px; }.float-one { top:44px;right:0; }.float-two { bottom:40px;left:0; }
+      .section { padding:65px 0; }.section-head { margin-bottom:30px; }.features-grid { grid-template-columns:1fr;gap:12px; }
+      .feature-card { min-height:0;padding:23px; }.showcase { padding:25px 18px;border-radius:26px; }.showcase-visual { min-height:260px; }
+      .download-panel { padding:38px 18px;border-radius:26px; }.footer-inner { flex-direction:column;text-align:center; }.footer-links { flex-wrap:wrap;justify-content:center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *,*::before,*::after { scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important; }
+      [data-reveal] { opacity:1;transform:none;filter:none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-shell">
+    <nav class="navbar" aria-label="Main navigation">
+      <a class="brand" href="#home" aria-label="نداء الصلاة - الرئيسية">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.8 20 7v10l-8 4.2L4 17V7l8-4.2Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 9.2 12 7l4 2.2v5.6L12 17l-4-2.2V9.2Z" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v10M8 9.2l8 5.6M16 9.2l-8 5.6" stroke="currentColor" stroke-width="1.15" opacity=".75"/></svg>
+        </span>
+        <span><span class="brand-name" data-i18n="brand">نداء الصلاة</span><span class="brand-caption">NIDAA AL-SALAH</span></span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#home" data-i18n="navHome">الرئيسية</a>
+        <a href="#features" data-i18n="navFeatures">المميزات</a>
+        <a href="#about" data-i18n="navAbout">عن التطبيق</a>
+        <a href="#download" data-i18n="navDownload">التحميل</a>
+      </div>
+      <div class="nav-actions">
+        <button class="tool-btn" id="langToggle" type="button" aria-label="Switch language"><span class="lang-label" id="langText">EN</span></button>
+        <button class="tool-btn" id="themeToggle" type="button" aria-label="Toggle color theme">
+          <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 15.2A8.4 8.4 0 0 1 8.8 3.8 8.8 8.8 0 1 0 20.2 15.2Z"/></svg>
+        </button>
+        <button class="tool-btn menu-toggle" id="menuToggle" type="button" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="hero-content" data-reveal="cloud">
+          <div class="eyebrow"><span class="eyebrow-dot"></span><span data-i18n="eyebrow">رفيقك للعبادة في كل يوم</span></div>
+          <h1 data-i18n-html="heroTitle">كل ما تحتاجه<br><span class="gold-text">في مكان واحد</span></h1>
+          <p class="hero-copy" data-i18n="heroCopy">نداء الصلاة يجمع مواقيت الصلاة والقرآن الكريم والأذكار واتجاه القبلة في تطبيق واحد، بواجهة عصرية وتجربة سهلة تساعدك على تنظيم يومك.</p>
+          <div class="hero-buttons">
+            <a class="button button-primary" href="#download"><span data-i18n="heroButton">اكتشف التطبيق</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a class="button button-ghost" href="#features"><span data-i18n="heroSecondary">استكشف المميزات</span></a>
+          </div>
+          <p class="hero-note" data-i18n="heroNote">مصمم لأجهزة Android • واجهة عربية سهلة الاستخدام</p>
+        </div>
+        <div class="hero-art" data-reveal="cloud">
+          <div class="orbit"></div>
+          <div class="phone-wrap">
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="phone-top"><span>9:41</span><span>◉ ◉ ▰</span></div>
+                <div class="phone-greeting" data-i18n="phoneGreeting">السلام عليكم</div>
+                <div class="phone-title" data-i18n="phoneTitle">مرحباً بك في نداء الصلاة</div>
+                <div class="prayer-panel">
+                  <small data-i18n="phonePanelLabel">رفيق يومك</small>
+                  <strong data-i18n="phonePanelTitle">حافظ على صلاتك</strong>
+                  <div class="line"></div>
+                  <div class="prayer-row"><span data-i18n="phonePanelSub">مواقيت الصلاة</span><span>✦</span></div>
+                </div>
+                <div class="phone-shortcuts">
+                  <div class="shortcut"><b>۞</b><span data-i18n="phoneQuran">القرآن</span></div>
+                  <div class="shortcut"><b>✧</b><span data-i18n="phoneAzkar">الأذكار</span></div>
+                  <div class="shortcut"><b>⌖</b><span data-i18n="phoneQibla">القبلة</span></div>
+                </div>
+                <div class="phone-bottom"></div>
+              </div>
+            </div>
+          </div>
+          <div class="float-card float-one"><span class="badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M5 9h14M7 9l5-5 5 5M7 15h10"/></svg></span><span><b data-i18n="floatOneTitle">مواقيت الصلاة</b><small data-i18n="floatOneSub">تابع أوقاتك بسهولة</small></span></div>
+          <div class="float-card float-two"><span class="badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 4 7v10l8 4 8-4V7l-8-4Z"/><path d="M8 10h8M8 14h8"/></svg></span><span><b data-i18n="floatTwoTitle">القرآن والأذكار</b><small data-i18n="floatTwoSub">محتواك في متناولك</small></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-head" data-reveal="cloud">
+          <div class="section-kicker" data-i18n="featuresKicker">مميزات التطبيق</div>
+          <h2 class="section-title" data-i18n-html="featuresTitle">رفيقك اليومي،<br><span class="gold-text">بتفاصيل تهتم بها</span></h2>
+          <p class="section-desc" data-i18n="featuresDesc">مجموعة من الأدوات والميزات الإسلامية في تجربة واحدة، لتصل إلى ما تحتاج إليه بسهولة.</p>
+        </div>
+        <div class="features-grid">
+          <article class="feature-card" data-reveal="cloud"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg></div><h3 data-i18n="featurePrayerTitle">مواقيت الصلاة</h3><p data-i18n="featurePrayerDesc">تابع أوقات الصلوات وتلقّ التنبيهات عند دخول أوقاتها.</p></article>
+          <article class="feature-card delay-1" data-reveal="cloud"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h10.5A3.5 3.5 0 0 1 19 8v12H8a3 3 0 0 1-3-3V4.5Z"/><path d="M5 16.5c0-1.7 1.3-3 3-3h11M9 8h6M9 11h5"/></svg></div><h3 data-i18n="featureQuranTitle">القرآن الكريم</h3><p data-i18n="featureQuranDesc">افتح سور القرآن الكريم واقرأها من داخل التطبيق.</p></article>
+          <article class="feature-card delay-2" data-reveal="cloud"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 20s-7-4.2-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.8-7 10-7 10Z"/><path d="M9 12h6M12 9v6"/></svg></div><h3 data-i18n="featureAzkarTitle">الأذكار والأدعية</h3><p data-i18n="featureAzkarDesc">مساحة مخصصة للأذكار والأدعية لتكون قريبة منك.</p></article>
+          <article class="feature-card" data-reveal="cloud"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m12 3 2.7 7.3L12 12l-2.7-1.7L12 3Z"/><path d="m12 12 2.7-1.7"/></svg></div><h3 data-i18n="featureQiblaTitle">اتجاه القبلة</h3><p data-i18n="featureQiblaDesc">تعرّف على اتجاه الكعبة المشرفة من خلال ميزة القبلة.</p></article>
+          <article class="feature-card delay-1" data-reveal="cloud"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4"/></svg></div><h3 data-i18n="featureAlertsTitle">التنبيهات والإشعارات</h3><p data-i18n="featureAlertsDesc">تنبيهات تساعدك على متابعة أوقات الصلاة والبقاء على اطلاع.</p></article>
+          <article class="feature-card delay-2" data-reveal="cloud"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7v5h-5"/><path d="M4.8 16a8 8 0 0 0 13.5 2M4 17v-5h5"/><path d="M19.2 8A8 8 0 0 0 5.7 6"/></svg></div><h3 data-i18n="featureUpdatesTitle">تحديثات التطبيق</h3><p data-i18n="featureUpdatesDesc">تابع الإصدارات الجديدة وتعرّف على التحديثات المتاحة.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container">
+        <div class="showcase">
+          <div class="showcase-visual" data-reveal="cloud">
+            <div class="quran-card">
+              <div class="quran-symbol">۞</div>
+              <h3 data-i18n="showcaseCardTitle">نورٌ في يومك</h3>
+              <p data-i18n="showcaseCardSub">القرآن الكريم • الأذكار • الصلاة</p>
+            </div>
+          </div>
+          <div class="showcase-copy" data-reveal="cloud">
+            <div class="section-kicker" data-i18n="aboutKicker">عن نداء الصلاة</div>
+            <h2 data-i18n-html="aboutTitle">تجربة واحدة تجمع<br><span class="gold-text">ما يهم يومك</span></h2>
+            <p data-i18n="aboutDesc">صُمّم نداء الصلاة ليجمع مجموعة من الخدمات الإسلامية في تطبيق واحد، مع واجهة واضحة وتنقّل سهل واهتمام بتجربة الاستخدام.</p>
+            <div class="showcase-points">
+              <div class="point"><span class="check">✓</span><span data-i18n="aboutPoint1">واجهة عصرية وسهلة الاستخدام</span></div>
+              <div class="point"><span class="check">✓</span><span data-i18n="aboutPoint2">خدمات أساسية ضمن تطبيق واحد</span></div>
+              <div class="point"><span class="check">✓</span><span data-i18n="aboutPoint3">متابعة الإصدارات والتحديثات</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="download">
+      <div class="container">
+        <div class="download-panel" data-reveal="cloud">
+          <div class="section-kicker" data-i18n="downloadKicker">ابدأ من هنا</div>
+          <h2 data-i18n-html="downloadTitle">حمّل <span class="gold-text">نداء الصلاة</span></h2>
+          <p data-i18n="downloadDesc">احصل على التطبيق وتعرّف على جميع ميزاته. ستجد هنا روابط الإصدارات العامة وملفات التثبيت المتاحة.</p>
+          <div class="download-meta"><span class="meta-pill" data-i18n="androidPill">Android</span><span class="meta-pill" data-i18n="releasePill">الإصدار 1.0.0</span><span class="meta-pill" data-i18n="apkPill">ملف APK</span></div>
+          <a class="button button-primary" id="downloadButton" href="https://github.com/lsisil140-debug/Nidaa-Al-Salah-Download/releases" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-5-5 5 5 5-5"/><path d="M5 17v3h14v-3"/></svg>
+            <span data-i18n="downloadButton">عرض إصدارات التحميل</span>
+          </a>
+          <p class="download-hint" data-i18n="downloadHint">سيتم تفعيل التنزيل المباشر لملف APK هنا بعد نشر ملف الإصدار في المستودع العام.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <a class="brand" href="#home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2.8 20 7v10l-8 4.2L4 17V7l8-4.2Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 9.2 12 7l4 2.2v5.6L12 17l-4-2.2V9.2Z" stroke="currentColor" stroke-width="1.5"/></svg></span><span><span class="brand-name" data-i18n="brand">نداء الصلاة</span><span class="brand-caption">NIDAA AL-SALAH</span></span></a>
+      <span class="footer-note" data-i18n="footerCopy">© نداء الصلاة — جميع الحقوق محفوظة</span>
+      <div class="footer-links"><a href="#features" data-i18n="footerFeatures">المميزات</a><a href="#download" data-i18n="footerDownload">التحميل</a><a href="https://github.com/lsisil140-debug/Nidaa-Al-Salah-Download" target="_blank" rel="noopener" data-i18n="footerGithub">GitHub</a></div>
+    </div>
+  </footer>
+
+  <script>
+    const translations = {
+      ar: {
+        brand:"نداء الصلاة", navHome:"الرئيسية", navFeatures:"المميزات", navAbout:"عن التطبيق", navDownload:"التحميل",
+        eyebrow:"رفيقك للعبادة في كل يوم", heroTitle:'كل ما تحتاجه<br><span class="gold-text">في مكان واحد</span>',
+        heroCopy:"نداء الصلاة يجمع مواقيت الصلاة والقرآن الكريم والأذكار واتجاه القبلة في تطبيق واحد، بواجهة عصرية وتجربة سهلة تساعدك على تنظيم يومك.",
+        heroButton:"اكتشف التطبيق", heroSecondary:"استكشف المميزات", heroNote:"مصمم لأجهزة Android • واجهة عربية سهلة الاستخدام",
+        phoneGreeting:"السلام عليكم", phoneTitle:"مرحباً بك في نداء الصلاة", phonePanelLabel:"رفيق يومك", phonePanelTitle:"حافظ على صلاتك", phonePanelSub:"مواقيت الصلاة",
+        phoneQuran:"القرآن", phoneAzkar:"الأذكار", phoneQibla:"القبلة",
+        floatOneTitle:"مواقيت الصلاة", floatOneSub:"تابع أوقاتك بسهولة", floatTwoTitle:"القرآن والأذكار", floatTwoSub:"محتواك في متناولك",
+        featuresKicker:"مميزات التطبيق", featuresTitle:'رفيقك اليومي،<br><span class="gold-text">بتفاصيل تهتم بها</span>',
+        featuresDesc:"مجموعة من الأدوات والميزات الإسلامية في تجربة واحدة، لتصل إلى ما تحتاج إليه بسهولة.",
+        featurePrayerTitle:"مواقيت الصلاة", featurePrayerDesc:"تابع أوقات الصلوات وتلقّ التنبيهات عند دخول أوقاتها.",
+        featureQuranTitle:"القرآن الكريم", featureQuranDesc:"افتح سور القرآن الكريم واقرأها من داخل التطبيق.",
+        featureAzkarTitle:"الأذكار والأدعية", featureAzkarDesc:"مساحة مخصصة للأذكار والأدعية لتكون قريبة منك.",
+        featureQiblaTitle:"اتجاه القبلة", featureQiblaDesc:"تعرّف على اتجاه الكعبة المشرفة من خلال ميزة القبلة.",
+        featureAlertsTitle:"التنبيهات والإشعارات", featureAlertsDesc:"تنبيهات تساعدك على متابعة أوقات الصلاة والبقاء على اطلاع.",
+        featureUpdatesTitle:"تحديثات التطبيق", featureUpdatesDesc:"تابع الإصدارات الجديدة وتعرّف على التحديثات المتاحة.",
+        showcaseCardTitle:"نورٌ في يومك", showcaseCardSub:"القرآن الكريم • الأذكار • الصلاة",
+        aboutKicker:"عن نداء الصلاة", aboutTitle:'تجربة واحدة تجمع<br><span class="gold-text">ما يهم يومك</span>',
+        aboutDesc:"صُمّم نداء الصلاة ليجمع مجموعة من الخدمات الإسلامية في تطبيق واحد، مع واجهة واضحة وتنقّل سهل واهتمام بتجربة الاستخدام.",
+        aboutPoint1:"واجهة عصرية وسهلة الاستخدام", aboutPoint2:"خدمات أساسية ضمن تطبيق واحد", aboutPoint3:"متابعة الإصدارات والتحديثات",
+        downloadKicker:"ابدأ من هنا", downloadTitle:'حمّل <span class="gold-text">نداء الصلاة</span>',
+        downloadDesc:"احصل على التطبيق وتعرّف على جميع ميزاته. ستجد هنا روابط الإصدارات العامة وملفات التثبيت المتاحة.",
+        androidPill:"Android", releasePill:"الإصدار 1.0.0", apkPill:"ملف APK",
+        downloadButton:"عرض إصدارات التحميل",
+        downloadHint:"سيتم تفعيل التنزيل المباشر لملف APK هنا بعد نشر ملف الإصدار في المستودع العام.",
+        footerCopy:"© نداء الصلاة — جميع الحقوق محفوظة", footerFeatures:"المميزات", footerDownload:"التحميل", footerGithub:"GitHub",
+        menuLabel:"فتح القائمة", themeDark:"التبديل إلى الوضع الفاتح", themeLight:"التبديل إلى الوضع الداكن"
+      },
+      en: {
+        brand:"Nidaa Al-Salah", navHome:"Home", navFeatures:"Features", navAbout:"About", navDownload:"Download",
+        eyebrow:"A companion for your daily worship", heroTitle:'Everything you need,<br><span class="gold-text">in one place</span>',
+        heroCopy:"Nidaa Al-Salah brings prayer times, the Holy Quran, daily adhkar, and Qibla direction together in one app, with a modern interface and an easy experience.",
+        heroButton:"Discover the app", heroSecondary:"Explore features", heroNote:"Made for Android • Simple and clear experience",
+        phoneGreeting:"Peace be upon you", phoneTitle:"Welcome to Nidaa Al-Salah", phonePanelLabel:"Your daily companion", phonePanelTitle:"Stay close to prayer", phonePanelSub:"Prayer times",
+        phoneQuran:"Quran", phoneAzkar:"Adhkar", phoneQibla:"Qibla",
+        floatOneTitle:"Prayer times", floatOneSub:"Keep your day in rhythm", floatTwoTitle:"Quran & Adhkar", floatTwoSub:"Your essentials, close by",
+        featuresKicker:"APP FEATURES", featuresTitle:'A daily companion,<br><span class="gold-text">thoughtfully brought together</span>',
+        featuresDesc:"A collection of Islamic tools and features in one simple experience, with easy access to what matters.",
+        featurePrayerTitle:"Prayer times", featurePrayerDesc:"Follow daily prayer times and receive notifications when they begin.",
+        featureQuranTitle:"The Holy Quran", featureQuranDesc:"Open and read Quranic surahs from within the app.",
+        featureAzkarTitle:"Adhkar & supplications", featureAzkarDesc:"A dedicated space for daily adhkar and supplications.",
+        featureQiblaTitle:"Qibla direction", featureQiblaDesc:"Find the direction of the Holy Kaaba with the Qibla feature.",
+        featureAlertsTitle:"Alerts & notifications", featureAlertsDesc:"Helpful notifications to follow prayer times and stay informed.",
+        featureUpdatesTitle:"App updates", featureUpdatesDesc:"Keep up with new releases and available app updates.",
+        showcaseCardTitle:"A light in your day", showcaseCardSub:"Quran • Adhkar • Prayer",
+        aboutKicker:"ABOUT NIDAA AL-SALAH", aboutTitle:'One experience for<br><span class="gold-text">what matters each day</span>',
+        aboutDesc:"Nidaa Al-Salah brings a collection of Islamic services into one app, with a clear interface, easy navigation, and a focus on usability.",
+        aboutPoint1:"A modern, easy-to-use interface", aboutPoint2:"Essential services in one app", aboutPoint3:"Release and update information",
+        downloadKicker:"GET STARTED", downloadTitle:'Get <span class="gold-text">Nidaa Al-Salah</span>',
+        downloadDesc:"Explore the app and its features. Public release links and available installation files will be listed here.",
+        androidPill:"Android", releasePill:"Version 1.0.0", apkPill:"APK file",
+        downloadButton:"View download releases",
+        downloadHint:"Direct APK download will be enabled here after the release file is published in the public repository.",
+        footerCopy:"© Nidaa Al-Salah — All rights reserved", footerFeatures:"Features", footerDownload:"Download", footerGithub:"GitHub",
+        menuLabel:"Open menu", themeDark:"Switch to light mode", themeLight:"Switch to dark mode"
+      }
+    };
+    const root = document.documentElement;
+    const themeToggle = document.getElementById("themeToggle");
+    const langToggle = document.getElementById("langToggle");
+    const themeIcon = document.getElementById("themeIcon");
+    const navLinks = document.getElementById("navLinks");
+    let language = localStorage.getItem("nidaa-language") || "ar";
+    let theme = localStorage.getItem("nidaa-theme") || "dark";
+
+    function applyTheme(value) {
+      theme = value;
+      root.dataset.theme = value;
+      themeIcon.innerHTML = value === "dark"
+        ? '<path d="M20.2 15.2A8.4 8.4 0 0 1 8.8 3.8 8.8 8.8 0 1 0 20.2 15.2Z"/>'
+        : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>';
+      themeToggle.setAttribute("aria-label", translations[language][value === "dark" ? "themeLight" : "themeDark"]);
+      document.querySelector('meta[name="theme-color"]').content = value === "dark" ? "#071a14" : "#edf4e9";
+      localStorage.setItem("nidaa-theme", value);
+    }
+    function applyLanguage(value) {
+      language = value;
+      root.lang = value;
+      root.dir = value === "ar" ? "rtl" : "ltr";
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (translations[value][key]) el.textContent = translations[value][key];
+      });
+      document.querySelectorAll("[data-i18n-html]").forEach(el => {
+        const key = el.dataset.i18nHtml;
+        if (translations[value][key]) el.innerHTML = translations[value][key];
+      });
+      document.getElementById("langText").textContent = value === "ar" ? "EN" : "ع";
+      langToggle.setAttribute("aria-label", value === "ar" ? "Switch to English" : "التبديل إلى العربية");
+      themeToggle.setAttribute("aria-label", translations[value][theme === "dark" ? "themeLight" : "themeDark"]);
+      document.getElementById("menuToggle").setAttribute("aria-label", translations[value].menuLabel);
+      document.title = value === "ar" ? "نداء الصلاة | رفيق يومك" : "Nidaa Al-Salah | Your daily companion";
+      localStorage.setItem("nidaa-language", value);
+    }
+    themeToggle.addEventListener("click", () => applyTheme(theme === "dark" ? "light" : "dark"));
+    langToggle.addEventListener("click", () => applyLanguage(language === "ar" ? "en" : "ar"));
+    document.getElementById("menuToggle").addEventListener("click", () => navLinks.classList.toggle("open"));
+    navLinks.querySelectorAll("a").forEach(link => link.addEventListener("click", () => navLinks.classList.remove("open")));
+    applyTheme(theme);
+    applyLanguage(language);
+
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .14, rootMargin: "0px 0px -35px 0px" });
+    document.querySelectorAll("[data-reveal]").forEach(el => revealObserver.observe(el));
+  </script>
+</body>
+</html>
