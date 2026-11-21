@@ -620,14 +620,20 @@
       document.getElementById("langText").textContent = value === "ar" ? "EN" : "ع";
       langToggle.setAttribute("aria-label", value === "ar" ? "Switch to English" : "التبديل إلى العربية");
       themeToggle.setAttribute("aria-label", translations[value][theme === "dark" ? "themeLight" : "themeDark"]);
-      document.getElementById("menuToggle").setAttribute("aria-label", translations[value].menuLabel);
+      const menuToggle = document.getElementById("menuToggle");
+      if (menuToggle) menuToggle.setAttribute("aria-label", translations[value].menuLabel);
       document.title = value === "ar" ? "نداء الصلاة | رفيق يومك" : "Nidaa Al-Salah | Your daily companion";
       localStorage.setItem("nidaa-language", value);
     }
     themeToggle.addEventListener("click", () => applyTheme(theme === "dark" ? "light" : "dark"));
     langToggle.addEventListener("click", () => applyLanguage(language === "ar" ? "en" : "ar"));
-    document.getElementById("menuToggle").addEventListener("click", () => navLinks.classList.toggle("open"));
-    navLinks.querySelectorAll("a").forEach(link => link.addEventListener("click", () => navLinks.classList.remove("open")));
+    // The main navigation links were intentionally removed; keep the header limited
+    // to the language and theme controls without binding listeners to missing elements.
+    if (navLinks) {
+      const menuToggle = document.getElementById("menuToggle");
+      if (menuToggle) menuToggle.addEventListener("click", () => navLinks.classList.toggle("open"));
+      navLinks.querySelectorAll("a").forEach(link => link.addEventListener("click", () => navLinks.classList.remove("open")));
+    }
     applyTheme(theme);
     applyLanguage(language);
 
