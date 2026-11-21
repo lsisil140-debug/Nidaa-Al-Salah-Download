@@ -44,7 +44,7 @@
 
 ملف التثبيت المطلوب اسمه `Nidaa-Al-Salat.apk`. بعد نشره ضمن إصدارات هذا المستودع العام، سيكون رابط التنزيل المباشر:
 
-[⬇️ تنزيل نداء الصلاة — APK](https://github.com/lsisil140-debug/Nidaa-Al-Salat/releases/latest/download/Nidaa-Al-Salat.apk)
+[⬇️ تنزيل نداء الصلاة — APK](https://github.com/lsisil140-debug/Nidaa-Al-Salah-Download/releases)
 
 [صفحة الإصدارات العامة](https://github.com/lsisil140-debug/Nidaa-Al-Salat/releases)
 
