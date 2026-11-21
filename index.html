@@ -351,30 +351,43 @@
       .app-art-card { transform:none; }
     }
 
+
+    /* Requested clean header, original app icon and separated screen gallery */
+    .nav-spacer { flex:1; min-width:1px; }
+    .navbar { justify-content:space-between; background:rgba(6,26,19,.20); -webkit-backdrop-filter:blur(34px) saturate(190%); backdrop-filter:blur(34px) saturate(190%); border-color:rgba(194,220,190,.16); }
+    [data-theme="light"] {
+      --bg:#e6f0e3; --bg-2:#d8e9d4; --surface:rgba(213,232,208,.76);
+      --surface-strong:rgba(199,224,195,.91); --surface-soft:rgba(36,95,55,.07);
+      --text:#173d2a; --muted:#4c7055; --muted-2:#6d8d72;
+      --line:rgba(66,116,72,.23); --shadow:0 24px 70px rgba(34,73,48,.12);
+      --header:rgba(180,211,178,.27); --card-glow:rgba(153,187,137,.20);
+    }
+    [data-theme="light"] body { background:linear-gradient(145deg,#eff6eb 0%,#e0eedc 46%,#d5e8d1 100%); }
+    [data-theme="light"] .navbar { background:rgba(202,226,198,.30); box-shadow:0 12px 34px rgba(34,73,48,.08),inset 0 1px rgba(255,255,255,.42); }
+    .app-icon-real { display:block; width:118px; height:118px; object-fit:contain; border-radius:28px; margin:12px auto 18px; box-shadow:0 16px 38px rgba(0,0,0,.20); }
+    .app-gallery-section { padding-top:36px; }
+    .app-gallery { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; align-items:start; }
+    .gallery-shot { min-width:0; margin:0; padding:10px; border-radius:25px; border:1px solid var(--line); background:var(--surface); box-shadow:var(--shadow); -webkit-backdrop-filter:blur(22px); backdrop-filter:blur(22px); overflow:hidden; transition:transform .35s ease,border-color .35s ease; }
+    .gallery-shot:hover { transform:translateY(-7px); border-color:var(--gold); }
+    .gallery-shot img { display:block; width:100%; height:auto; aspect-ratio:340/621; object-fit:cover; object-position:top; border-radius:17px; cursor:zoom-in; }
+    .gallery-shot figcaption { padding:13px 5px 5px; color:var(--text); text-align:center; font-weight:700; font-size:.9rem; }
+    .download-actions { gap:14px; }
+    .download-actions .button { min-width:220px; }
+    .button-ghost { background:var(--surface); border-color:var(--line); }
+    @media(max-width:900px) { .app-gallery { grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; } }
+    @media(max-width:560px) { .app-gallery { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; } .gallery-shot {padding:7px;border-radius:18px;} .gallery-shot img{border-radius:12px;} .gallery-shot figcaption{font-size:.78rem;} .app-icon-real{width:96px;height:96px;} }
+    @media(min-width:1100px) { .app-gallery { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+
   </style>
 </head>
 <body>
   <header class="top-shell">
     <nav class="navbar" aria-label="Main navigation">
-      <a class="brand" href="#home" aria-label="نداء الصلاة - الرئيسية">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.8 20 7v10l-8 4.2L4 17V7l8-4.2Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 9.2 12 7l4 2.2v5.6L12 17l-4-2.2V9.2Z" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v10M8 9.2l8 5.6M16 9.2l-8 5.6" stroke="currentColor" stroke-width="1.15" opacity=".75"/></svg>
-        </span>
-        <span><span class="brand-name" data-i18n="brand">نداء الصلاة</span><span class="brand-caption">NIDAA AL-SALAT</span></span>
-      </a>
-      <div class="nav-links" id="navLinks">
-        <a href="#home" data-i18n="navHome">الرئيسية</a>
-        <a href="#features" data-i18n="navFeatures">المميزات</a>
-        <a href="#about" data-i18n="navAbout">عن التطبيق</a>
-        <a href="#download" data-i18n="navDownload">التحميل</a>
-      </div>
+      <div class="nav-spacer" aria-hidden="true"></div>
       <div class="nav-actions">
         <button class="tool-btn" id="langToggle" type="button" aria-label="Switch language"><span class="lang-label" id="langText">EN</span></button>
         <button class="tool-btn" id="themeToggle" type="button" aria-label="Toggle color theme">
           <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 15.2A8.4 8.4 0 0 1 8.8 3.8 8.8 8.8 0 1 0 20.2 15.2Z"/></svg>
-        </button>
-        <button class="tool-btn menu-toggle" id="menuToggle" type="button" aria-label="Open menu">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
       </div>
     </nav>
@@ -440,20 +453,35 @@
       </div>
     </section>
 
+    <section class="section app-gallery-section" id="gallery">
+      <div class="container">
+        <div class="section-head" data-reveal="cloud">
+          <div class="section-kicker" data-i18n="galleryKicker">لقطات من التطبيق</div>
+          <h2 class="section-title" data-i18n-html="galleryTitle">تعرّف على <span class="gold-text">واجهات نداء الصلاة</span></h2>
+          <p class="section-desc" data-i18n="galleryDesc">أربع لقطات منفصلة من شاشات التطبيق، يمكنك تكبير كل واحدة لمشاهدتها بوضوح.</p>
+        </div>
+        <div class="app-gallery">
+          <figure class="gallery-shot" data-reveal="cloud"><img src="assets/prayer-times.webp" alt="واجهة مواقيت الصلاة في تطبيق نداء الصلاة" loading="lazy"><figcaption data-i18n="galleryPrayer">مواقيت الصلاة</figcaption></figure>
+          <figure class="gallery-shot delay-1" data-reveal="cloud"><img src="assets/quran.webp" alt="واجهة القرآن الكريم في تطبيق نداء الصلاة" loading="lazy"><figcaption data-i18n="galleryQuran">القرآن الكريم</figcaption></figure>
+          <figure class="gallery-shot delay-2" data-reveal="cloud"><img src="assets/qibla.webp" alt="واجهة اتجاه القبلة في تطبيق نداء الصلاة" loading="lazy"><figcaption data-i18n="galleryQibla">اتجاه القبلة</figcaption></figure>
+          <figure class="gallery-shot delay-3" data-reveal="cloud"><img src="assets/hadith.webp" alt="واجهة الأحاديث النبوية في تطبيق نداء الصلاة" loading="lazy"><figcaption data-i18n="galleryHadith">الأحاديث النبوية</figcaption></figure>
+        </div>
+      </div>
+    </section>
     <section class="section" id="about">
       <div class="container">
         <div class="showcase">
           <div class="showcase-visual" data-reveal="cloud">
             <div class="app-art-card">
-              <img class="app-hero-image" src="assets/nidaa-hero.webp" alt="الخلفية الفنية الأصلية المستخرجة من تطبيق نداء الصلاة">
+              <img class="app-icon-real" src="assets/app-icon.png" alt="أيقونة تطبيق نداء الصلاة">
               <div class="app-art-overlay">
                 <span class="app-art-symbol" aria-hidden="true">۞</span>
                 <div>
-                  <strong data-i18n="showcaseCardTitle">نورٌ في يومك</strong>
-                  <span data-i18n="showcaseCardSub">القرآن الكريم • الأذكار • الصلاة</span>
+                  <strong data-i18n="showcaseCardTitle">نداء الصلاة</strong>
+                  <span data-i18n="showcaseCardSub">القرآن الكريم • الأذكار • الصلاة • القبلة</span>
                 </div>
               </div>
-              <span class="asset-caption" data-i18n="assetCaption">من الهوية البصرية الأصلية للتطبيق</span>
+              <span class="asset-caption" data-i18n="assetCaption">الأيقونة الأصلية للتطبيق</span>
             </div>
           </div>
           <div class="showcase-copy" data-reveal="cloud">
@@ -474,17 +502,17 @@
       <div class="container">
         <div class="download-panel" data-reveal="cloud">
           <div class="section-kicker" data-i18n="downloadKicker">ابدأ من هنا</div>
-          <h2 data-i18n-html="downloadTitle">حمّل <span class="gold-text">نداء الصلاة</span></h2>
+          <h2 data-i18n-html="downloadTitle">قم بتثبيت <span class="gold-text">نداء الصلاة</span></h2>
           <p data-i18n="downloadDesc">احصل على التطبيق وتعرّف على جميع ميزاته. ستجد هنا روابط الإصدارات العامة وملفات التثبيت المتاحة.</p>
           <div class="download-meta"><span class="meta-pill" data-i18n="androidPill">Android</span><span class="meta-pill" data-i18n="releasePill">الإصدار 1.0.0</span><span class="meta-pill" data-i18n="apkPill">ملف APK</span></div>
           <div class="download-actions">
             <a class="button button-primary" id="downloadButton" href="https://github.com/lsisil140-debug/Nidaa-Al-Salah-Download/releases/latest/download/Nidaa-Al-Salat.apk">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-5-5 5 5 5-5"/><path d="M5 17v3h14v-3"/></svg>
-              <span data-i18n="downloadDirectButton">تنزيل مباشر</span>
+              <span data-i18n="downloadDirectButton">تثبيت التطبيق الآن</span>
             </a>
             <a class="button button-ghost" id="githubDownloadButton" href="https://github.com/lsisil140-debug/Nidaa-Al-Salah-Download/releases" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7h12M8 12h12M8 17h12"/><path d="M4 7h.01M4 12h.01M4 17h.01"/></svg>
-              <span data-i18n="downloadGithubButton">التنزيل عبر GitHub</span>
+              <span data-i18n="downloadGithubButton">اختيار إصدار من GitHub</span>
             </a>
           </div>
           <p class="download-hint" data-i18n="downloadHint">رابط التنزيل المباشر سيعمل بعد إضافة ملف APK إلى إصدارات المستودع العام.</p>
@@ -526,8 +554,8 @@
         downloadKicker:"ابدأ من هنا", downloadTitle:'حمّل <span class="gold-text">نداء الصلاة</span>',
         downloadDesc:"احصل على التطبيق وتعرّف على جميع ميزاته. ستجد هنا روابط الإصدارات العامة وملفات التثبيت المتاحة.",
         androidPill:"Android", releasePill:"الإصدار 1.0.0", apkPill:"ملف APK",
-        downloadButton:"تنزيل ملف APK", downloadDirectButton:"تنزيل مباشر", downloadGithubButton:"التنزيل عبر GitHub",
-        downloadHint:"رابط التنزيل المباشر سيعمل بعد إضافة ملف APK إلى إصدارات المستودع العام.", assetCaption:"من الهوية البصرية الأصلية للتطبيق",
+        downloadButton:"تنزيل ملف APK", downloadDirectButton:"تثبيت التطبيق الآن", downloadGithubButton:"اختيار إصدار من GitHub",
+        downloadHint:"اختر التثبيت المباشر أو تصفّح الإصدارات المتاحة على GitHub.", assetCaption:"الأيقونة الأصلية للتطبيق", galleryKicker:"لقطات من التطبيق", galleryTitle:'تعرّف على <span class="gold-text">واجهات نداء الصلاة</span>', galleryDesc:"أربع لقطات منفصلة من شاشات التطبيق، يمكنك تكبير كل واحدة لمشاهدتها بوضوح.", galleryPrayer:"مواقيت الصلاة", galleryQuran:"القرآن الكريم", galleryQibla:"اتجاه القبلة", galleryHadith:"الأحاديث النبوية",
         footerCopy:"© نداء الصلاة — جميع الحقوق محفوظة", footerFeatures:"المميزات", footerDownload:"التحميل", footerGithub:"GitHub",
         menuLabel:"فتح القائمة", themeDark:"التبديل إلى الوضع الفاتح", themeLight:"التبديل إلى الوضع الداكن"
       },
@@ -554,8 +582,8 @@
         downloadKicker:"GET STARTED", downloadTitle:'Get <span class="gold-text">Nidaa Al-Salah</span>',
         downloadDesc:"Explore the app and its features. Public release links and available installation files will be listed here.",
         androidPill:"Android", releasePill:"Version 1.0.0", apkPill:"APK file",
-        downloadButton:"Download APK", downloadDirectButton:"Direct download", downloadGithubButton:"Download via GitHub",
-        downloadHint:"The direct download link will work after the APK is added to the public repository release.", assetCaption:"From the app's original visual identity",
+        downloadButton:"Download APK", downloadDirectButton:"Install the app now", downloadGithubButton:"Choose a release on GitHub",
+        downloadHint:"Choose direct installation or browse available releases on GitHub.", assetCaption:"The app's original icon", galleryKicker:"App screenshots", galleryTitle:'Explore <span class="gold-text">Nidaa Al-Salah screens</span>', galleryDesc:"Four separate screenshots from the app. Open any image to view it more closely.", galleryPrayer:"Prayer times", galleryQuran:"Holy Quran", galleryQibla:"Qibla direction", galleryHadith:"Prophetic hadiths",
         footerCopy:"© Nidaa Al-Salah — All rights reserved", footerFeatures:"Features", footerDownload:"Download", footerGithub:"GitHub",
         menuLabel:"Open menu", themeDark:"Switch to light mode", themeLight:"Switch to dark mode"
       }
