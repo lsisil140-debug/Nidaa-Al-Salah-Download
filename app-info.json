@@ -25,5 +25,8 @@
     "التحقق من تحديثات التطبيق",
     "دعم العربية والإنجليزية والفرنسية"
   ],
-  "downloadStatus": "APK built successfully; public upload to this repository is still pending."
+  "downloadStatus": "ملف APK جُهز محليًا؛ يلزم رفعه إلى إصدار عام في مستودع Nidaa-Al-Salat لتفعيل رابط التنزيل العام.",
+  "repositorySlug": "Nidaa-Al-Salat",
+  "apkFileName": "Nidaa-Al-Salat.apk",
+  "downloadUrl": "https://github.com/lsisil140-debug/Nidaa-Al-Salat/releases/latest/download/Nidaa-Al-Salat.apk"
 }
