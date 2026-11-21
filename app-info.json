@@ -25,8 +25,12 @@
     "التحقق من تحديثات التطبيق",
     "دعم العربية والإنجليزية والفرنسية"
   ],
-  "downloadStatus": "ملف APK جُهز محليًا؛ يلزم رفعه إلى إصدار عام في مستودع Nidaa-Al-Salat لتفعيل رابط التنزيل العام.",
-  "repositorySlug": "Nidaa-Al-Salat",
+  "downloadStatus": "تم نشر ملف APK علنًا ضمن الإصدار v1.0.0، ورابط التنزيل المباشر جاهز.",
+  "repositorySlug": "Nidaa-Al-Salah-Download",
   "apkFileName": "Nidaa-Al-Salat.apk",
-  "downloadUrl": "https://github.com/lsisil140-debug/Nidaa-Al-Salat/releases/latest/download/Nidaa-Al-Salat.apk"
+  "downloadUrl": "https://github.com/lsisil140-debug/Nidaa-Al-Salah-Download/releases/latest/download/Nidaa-Al-Salat.apk",
+  "releaseUrl": "https://github.com/lsisil140-debug/Nidaa-Al-Salah-Download/releases",
+  "releaseTag": "v1.0.0",
+  "apkSizeBytes": 24354536,
+  "sha256": "4e4b399b0f2c77c703b2017c320b13bd30e9bb28c7410847ad8197c23a649a20"
 }
