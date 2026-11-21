@@ -352,9 +352,13 @@
     }
 
 
-    /* Requested clean header, original app icon and separated screen gallery */
-    .nav-spacer { flex:1; min-width:1px; }
-    .navbar { justify-content:space-between; background:rgba(6,26,19,.20); -webkit-backdrop-filter:blur(34px) saturate(190%); backdrop-filter:blur(34px) saturate(190%); border-color:rgba(194,220,190,.16); }
+    /* Minimal floating controls: language and appearance only */
+    .top-shell { position:absolute; top:16px; right:18px; z-index:50; width:auto; margin:0; }
+    .navbar { min-height:44px; justify-content:flex-end; gap:8px; padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; -webkit-backdrop-filter:none; backdrop-filter:none; }
+    .nav-actions { gap:10px; }
+    .tool-btn { width:42px; min-height:42px; padding:0; border-radius:14px; background:var(--surface); border-color:var(--line); box-shadow:0 5px 16px rgba(0,0,0,.10); }
+    .lang-label { font-size:.72rem; }
+    @media(max-width:640px) { .top-shell { top:12px; right:12px; } }
     [data-theme="light"] {
       --bg:#e6f0e3; --bg-2:#d8e9d4; --surface:rgba(213,232,208,.76);
       --surface-strong:rgba(199,224,195,.91); --surface-soft:rgba(36,95,55,.07);
@@ -453,20 +457,6 @@
       </div>
     </section>
 
-    <section class="section app-gallery-section" id="gallery">
-      <div class="container">
-        <div class="section-head" data-reveal="cloud">
-          <div class="section-kicker" data-i18n="galleryKicker">لقطات من التطبيق</div>
-          <h2 class="section-title" data-i18n-html="galleryTitle">تعرّف على <span class="gold-text">واجهات نداء الصلاة</span></h2>
-          <p class="section-desc" data-i18n="galleryDesc">لقطات منفصلة من شاشات التطبيق، يمكنك تكبير كل واحدة لمشاهدتها بوضوح.</p>
-        </div>
-        <div class="app-gallery">
-          <figure class="gallery-shot" data-reveal="cloud"><img src="assets/prayer-times.webp" alt="واجهة مواقيت الصلاة في تطبيق نداء الصلاة" loading="lazy"><figcaption data-i18n="galleryPrayer">مواقيت الصلاة</figcaption></figure>
-          <figure class="gallery-shot delay-1" data-reveal="cloud"><img src="assets/quran.webp" alt="واجهة القرآن الكريم في تطبيق نداء الصلاة" loading="lazy"><figcaption data-i18n="galleryQuran">القرآن الكريم</figcaption></figure>
-          <figure class="gallery-shot delay-2" data-reveal="cloud"><img src="assets/qibla.webp" alt="واجهة اتجاه القبلة في تطبيق نداء الصلاة" loading="lazy"><figcaption data-i18n="galleryQibla">اتجاه القبلة</figcaption></figure>
-        </div>
-      </div>
-    </section>
     <section class="section" id="about">
       <div class="container">
         <div class="showcase">
